@@ -36,9 +36,9 @@ esperanto.bundle({
     intro:
         (argv["polyfill-map"] ? polyfill.Map : "") +
         '(function(global) {\n' +
-        '  "use strict";\n',
+        '  "use strict";\n' +
+        '\n',
     outro:
-        '\n' +
         '\n' +
         '})(this);\n'
   }).code)
