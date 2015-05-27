@@ -8,15 +8,14 @@ var argv = minimist(process.argv.slice(2));
 
 var polyfill = {
   "Map":
-      '  if (!global.Map) {\n' +
-      '    var Map = function() {};\n' +
-      '    Map.prototype = {\n' +
-      '      set: function(k, v) { this["$" + k] = v; return this; },\n' +
-      '      get: function(k) { return this["$" + k]; },\n' +
-      '      has: function(k) { return "$" + k in this; }\n' +
-      '    };\n' +
-      '    global.Map = Map;\n' +
-      '  }\n' +
+      'if (!this.Map) {\n' +
+      '  Map = function() {};\n' +
+      '  Map.prototype = {\n' +
+      '    set: function(k, v) { this["$" + k] = v; return this; },\n' +
+      '    get: function(k) { return this["$" + k]; },\n' +
+      '    has: function(k) { return "$" + k in this; }\n' +
+      '  };\n' +
+      '}\n' +
       '\n'
 };
 
@@ -35,9 +34,9 @@ esperanto.bundle({
   process.stdout.write(bundle.concat({
     indent: "  ",
     intro:
+        (argv["polyfill-map"] ? polyfill.Map : "") +
         '(function(global) {\n' +
-        '  "use strict";\n' +
-        '\n' + (argv["polyfill-map"] ? polyfill.Map : ""),
+        '  "use strict";\n',
     outro:
         '\n' +
         '\n' +
