@@ -40,7 +40,7 @@ esperanto.bundle({
         '\n',
     outro:
         '\n' +
-        '})(this);\n'
+        '})(typeof global === "undefined" ? this : global);\n'
   }).code)
 }).catch(function(error) {
   console.error(error);
