@@ -4,8 +4,6 @@ var path = require("path"),
     minimist = require("minimist"),
     esperanto = require("esperanto");
 
-var argv = minimist(process.argv.slice(2));
-
 var polyfill = {
   "Map":
       'if (!this.Map) {\n' +
@@ -19,25 +17,27 @@ var polyfill = {
       '\n'
 };
 
+var argv = minimist(process.argv.slice(2)),
+		names = (argv.name || "d3").split("."),
+		input = "./" + argv._[0],
+		prologue = argv["polyfill-map"] ? polyfill.Map : "";
+
+var standalone =
+    'import * as _ from ' + JSON.stringify(input) + ';\n' +
+    'var object = global;\n' +
+    names.map(function(name) { return 'object = object.' + name + ' || (object.' + name + ' = {});\n'; }).join("") +
+    'for (var name in _) object[name] = _[name];\n' +
+    'if (typeof define === "function" && define.amd) define(d3);\n' +
+    'else if (typeof module === "object" && module.exports) module.exports = d3;\n';
+
 esperanto.bundle({
   entry: "standalone.js",
-  modules: {
-    "standalone.js":
-        'import * as _ from ' + JSON.stringify("./" + argv._[0]) + ';\n' +
-        'var d3 = global.d3 || (global.d3 = {});\n' +
-        'for (var name in _) {\n' +
-        '  var object = d3, names = name.split("_"), value = _[name];\n' +
-        '  while (name = names.shift(), names.length) object = object[name] || (object[name] = {});\n' +
-        '  object[name] = value;\n' +
-        '}\n' +
-        'if (typeof define === "function" && define.amd) define(d3);\n' +
-        'else if (typeof module === "object" && module.exports) module.exports = d3;\n'
-  }
+  modules: {"standalone.js": standalone}
 }).then(function(bundle) {
   process.stdout.write(bundle.concat({
     indent: "  ",
     intro:
-        (argv["polyfill-map"] ? polyfill.Map : "") +
+        prologue +
         '(function(global) {\n' +
         '  "use strict";\n' +
         '\n',
