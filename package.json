@@ -1,6 +1,6 @@
 {
   "name": "d3-bundler",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "An Esperanto-based bundler for D3 modules.",
   "repository": {
     "type": "git",
@@ -10,7 +10,7 @@
     "d3-bundler": "./d3-bundler"
   },
   "dependencies": {
-    "esperanto": "0.7",
+    "esperanto": "~0.7.1",
     "minimist": "1"
   }
 }
