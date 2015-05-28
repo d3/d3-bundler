@@ -23,10 +23,13 @@ esperanto.bundle({
   entry: "standalone.js",
   modules: {
     "standalone.js":
-        'import index from ' + JSON.stringify("./" + argv._[0]) + ';\n' +
-        'var d3 = global.d3;\n' +
-        'if (d3) for (var field in index) d3[field] = index[field];\n' +
-        'else global.d3 = d3 = index;\n' +
+        'import * as _ from ' + JSON.stringify("./" + argv._[0]) + ';\n' +
+        'var d3 = global.d3 || (global.d3 = {});\n' +
+        'for (var name in _) {\n' +
+        '  var object = d3, names = name.split("_"), value = _[name];\n' +
+        '  while (name = names.shift(), names.length) object = object[name] || (object[name] = {});\n' +
+        '  object[name] = value;\n' +
+        '}\n' +
         'if (typeof define === "function" && define.amd) define(d3);\n' +
         'else if (typeof module === "object" && module.exports) module.exports = d3;\n'
   }
