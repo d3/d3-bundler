@@ -18,9 +18,9 @@ var polyfill = {
 };
 
 var argv = minimist(process.argv.slice(2)),
-		names = (argv.name || "d3").split("."),
-		input = "./" + argv._[0],
-		prologue = argv["polyfill-map"] ? polyfill.Map : "";
+    names = (argv.name || "d3").split("."),
+    input = "./" + argv._[0],
+    prologue = argv["polyfill-map"] ? polyfill.Map : "";
 
 var standalone =
     'import * as _ from ' + JSON.stringify(input) + ';\n' +
