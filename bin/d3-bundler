@@ -24,7 +24,12 @@ var argv = minimist(process.argv.slice(2)),
     prologue = argv["polyfill-map"] ? polyfill.Map : "";
 
 rollup.rollup({
-  entry: entry
+  entry: entry,
+  resolvePath: function(importee, importer, options) {
+    return /^\./.test(importee)
+        ? path.resolve(path.dirname(importer), importee).replace(/\.js$/, "") + ".js"
+        : path.join("node_modules", importee, "index.js");
+  }
 }).then(function(bundle) {
   if (prologue) process.stdout.write(prologue);
   process.stdout.write(bundle.generate({format: "umd", moduleName: name}).code);
