@@ -1,3 +1,2 @@
-import {select, selectAll} from "d3-selection";
-import {ease} from "d3-transition";
-export {select, selectAll, ease};
+import {event, select, selectAll} from "d3-selection";
+export {event, select, selectAll};
