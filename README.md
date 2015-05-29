@@ -1,4 +1,4 @@
-An [Esperanto-based](https://github.com/esperantojs/esperanto/wiki/Bundling-multiple-ES6-modules) bundler for D3 modules.
+An [Rollup](https://github.com/rollup/rollup)-based bundler for D3 modules.
 
 To install:
 
@@ -6,8 +6,28 @@ To install:
 npm install --save-dev d3-bundler
 ```
 
-To use:
+To use, define an ES6 module that imports the D3 code you need:
+
+```js
+import {select, selectAll} from "d3-selection";
+import {ease} from "d3-transition";
+export {select, selectAll, ease};
+```
+
+Make sure you have these D3 modules installed:
 
 ```
-node_modules/.bin/d3-bundler -- index.js > output.js
+npm install --save d3-selection d3-transition
+```
+
+Then build your bundle!
+
+```
+node_modules/.bin/d3-bundler -- d3.js > d3-bundle.js
+```
+
+Or, if you clone this repo, you can try:
+
+```
+bin/d3-bundler --polyfill-map -- example/d3.js
 ```

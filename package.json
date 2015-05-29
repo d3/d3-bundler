@@ -7,10 +7,15 @@
     "url": "https://github.com/d3/d3-bundler.git"
   },
   "bin": {
-    "d3-bundler": "./d3-bundler"
+    "d3-bundler": "bin/d3-bundler"
   },
   "dependencies": {
-    "esperanto": "~0.7.1",
+    "rollup": "~0.6.5",
     "minimist": "1"
+  },
+  "devDependencies": {
+    "d3-selection": "~0.4.3",
+    "d3-selection-multi": "~0.2.2",
+    "d3-transition": "~0.0.1"
   }
 }

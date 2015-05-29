@@ -2,7 +2,7 @@
 
 var path = require("path"),
     minimist = require("minimist"),
-    esperanto = require("esperanto");
+    rollup = require("rollup");
 
 var polyfill = {
   "Map":
@@ -23,11 +23,11 @@ var argv = minimist(process.argv.slice(2)),
     input = "./" + argv._[0],
     prologue = argv["polyfill-map"] ? polyfill.Map : "";
 
-esperanto.bundle({
+rollup.rollup({
   entry: entry
 }).then(function(bundle) {
   if (prologue) process.stdout.write(prologue);
-  process.stdout.write(bundle.toUmd({name: name, strict: true}).code.replace(/^  /gm, ""));
+  process.stdout.write(bundle.generate({format: "umd", moduleName: name}).code);
 }).catch(function(error) {
   console.error(error);
 });
