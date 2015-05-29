@@ -1,5 +1,7 @@
 An [Rollup](https://github.com/rollup/rollup)-based bundler for D3 modules.
 
+## Introduction
+
 To install:
 
 ```
@@ -29,12 +31,6 @@ Then build your bundle!
 
 ```
 node_modules/.bin/d3-bundler -- bundle.js > d3.js
-```
-
-Or, if you clone this repo, you can try:
-
-```
-bin/d3-bundler -- example/one.js
 ```
 
 ## Command Line Reference
