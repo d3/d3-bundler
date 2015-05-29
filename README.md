@@ -29,10 +29,24 @@ Make sure you have these D3 modules installed:
 npm install --save d3-selection
 ```
 
-Then build your bundle!
+Build your bundle:
 
 ```
 node_modules/.bin/d3-bundler -- bundle.js > d3.js
+```
+
+Have a nice day!
+
+```html
+<!DOCTYPE html>
+<meta charset="utf-8">
+<body>
+<script src="d3.js"></script>
+<script>
+
+d3.select("body").append("h1").text("Hello, world!");
+
+</script>
 ```
 
 ## Command Line Reference
