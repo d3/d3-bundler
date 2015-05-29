@@ -27,7 +27,7 @@ esperanto.bundle({
   entry: entry
 }).then(function(bundle) {
   if (prologue) process.stdout.write(prologue);
-  process.stdout.write(bundle.toUmd({name: name, strict: true}).code);
+  process.stdout.write(bundle.toUmd({name: name, strict: true}).code.replace(/^  /gm, ""));
 }).catch(function(error) {
   console.error(error);
 });
