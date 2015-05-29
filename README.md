@@ -29,5 +29,5 @@ node_modules/.bin/d3-bundler -- d3.js > d3-bundle.js
 Or, if you clone this repo, you can try:
 
 ```
-bin/d3-bundler --polyfill-map -- example/d3.js
+bin/d3-bundler --polyfill-map -- example/one.js
 ```
