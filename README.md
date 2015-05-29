@@ -14,12 +14,16 @@ To use, define an ES6 module that imports the D3 code you need and defines the
 corresponding `d3` object. For example:
 
 ```js
-import {event, select, selectAll} from "d3-selection";
+import {
+  event,
+  select,
+  selectAll
+} from "d3-selection";
 
 export default {
   get event() { return event; },
-  select,
-  selectAll
+  select: select,
+  selectAll: selectAll
 };
 ```
 
