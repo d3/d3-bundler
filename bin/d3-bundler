@@ -20,7 +20,7 @@ var polyfill = {
 var argv = minimist(process.argv.slice(2)),
     entry = argv._[0],
     name = argv.name || "d3",
-    input = "./" + argv._[0],
+    format = argv.format || "umd",
     prologue = argv["polyfill-map"] ? polyfill.Map : "";
 
 rollup.rollup({
@@ -32,7 +32,7 @@ rollup.rollup({
   }
 }).then(function(bundle) {
   if (prologue) process.stdout.write(prologue);
-  process.stdout.write(bundle.generate({format: "umd", moduleName: name}).code);
+  process.stdout.write(bundle.generate({format: format, moduleName: name}).code);
 }).catch(function(error) {
   console.error(error);
 });
