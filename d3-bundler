@@ -6,7 +6,7 @@ var path = require("path"),
 
 var polyfill = {
   "Map":
-      'if (!this.Map) {\n' +
+      'if (typeof Map === "undefined") {\n' +
       '  Map = function() {};\n' +
       '  Map.prototype = {\n' +
       '    set: function(k, v) { this["$" + k] = v; return this; },\n' +
@@ -18,33 +18,16 @@ var polyfill = {
 };
 
 var argv = minimist(process.argv.slice(2)),
-    names = (argv.name || "d3").split("."),
+    entry = argv._[0],
+    name = argv.name || "d3",
     input = "./" + argv._[0],
     prologue = argv["polyfill-map"] ? polyfill.Map : "";
 
-var standalone =
-    'import * as _ from ' + JSON.stringify(input) + ';\n' +
-    'var object = global;\n' +
-    names.map(function(name) { return 'object = object.' + name + ' || (object.' + name + ' = {});\n'; }).join("") +
-    'for (var name in _) object[name] = _[name];\n' +
-    'if (typeof define === "function" && define.amd) define(d3);\n' +
-    'else if (typeof module === "object" && module.exports) module.exports = d3;\n';
-
 esperanto.bundle({
-  entry: "standalone.js",
-  modules: {"standalone.js": standalone}
+  entry: entry
 }).then(function(bundle) {
-  process.stdout.write(bundle.concat({
-    indent: "  ",
-    intro:
-        prologue +
-        '(function(global) {\n' +
-        '  "use strict";\n' +
-        '\n',
-    outro:
-        '\n' +
-        '})(typeof global === "undefined" ? this : global);\n'
-  }).code)
+  if (prologue) process.stdout.write(prologue);
+  process.stdout.write(bundle.toUmd({name: name, strict: true}).code);
 }).catch(function(error) {
   console.error(error);
 });
