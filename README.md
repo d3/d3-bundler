@@ -1,6 +1,6 @@
 # d3-bundler
 
-An [Rollup](https://github.com/rollup/rollup)-based bundler for D3 modules.
+A [Rollup](https://github.com/rollup/rollup)-based bundler for D3 modules.
 
 ## Introduction
 
