@@ -5,6 +5,16 @@ var path = require("path"),
     rollup = require("rollup");
 
 var polyfill = {
+  "requestAnimationFrame":
+      'if (typeof requestAnimationFrame === "undefined") {\n' +
+      '  requestAnimationFrame = typeof window !== "undefined"\n' +
+      '      && (window.msRequestAnimationFrame\n' +
+      '      || window.mozRequestAnimationFrame\n' +
+      '      || window.webkitRequestAnimationFrame\n' +
+      '      || window.oRequestAnimationFrame)\n' +
+      '      || function(callback) { setTimeout(callback, 17); };\n' +
+      '}\n' +
+      '\n',
   "Map":
       'if (typeof Map === "undefined") {\n' +
       '  Map = function() {};\n' +
@@ -20,8 +30,7 @@ var polyfill = {
 var argv = minimist(process.argv.slice(2)),
     entry = argv._[0],
     name = argv.name || "d3",
-    format = argv.format || "umd",
-    prologue = argv["polyfill-map"] ? polyfill.Map : "";
+    format = argv.format || "umd";
 
 rollup.rollup({
   entry: entry,
@@ -31,7 +40,8 @@ rollup.rollup({
         : path.join("node_modules", importee, "index.js");
   }
 }).then(function(bundle) {
-  if (prologue) process.stdout.write(prologue);
+  if (argv["polyfill"] || argv["polyfill-map"]) process.stdout.write(polyfill.Map);
+  if (argv["polyfill"] || argv["polyfill-raf"]) process.stdout.write(polyfill.requestAnimationFrame);
   process.stdout.write(bundle.generate({format: format, moduleName: name}).code);
 }).catch(function(error) {
   console.error(error);
