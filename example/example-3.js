@@ -1,18 +1,20 @@
 import {
   event,
   select,
-  selectAll
+  selectAll,
+  selection
 } from "d3-selection";
 
 import {
-  ease
+  transition
 } from "d3-transition";
 
 import "d3-transition";
 
 export default {
   get event() { return event; },
-  ease: ease,
   select: select,
-  selectAll: selectAll
+  selectAll: selectAll,
+  selection: selection,
+  transition: transition
 };

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-var path = require("path"),
+var fs = require("fs"),
+    path = require("path"),
     minimist = require("minimist"),
     rollup = require("rollup");
 
@@ -35,9 +36,10 @@ var argv = minimist(process.argv.slice(2)),
 rollup.rollup({
   entry: entry,
   resolvePath: function(importee, importer, options) {
-    return /^\./.test(importee)
-        ? path.resolve(path.dirname(importer), importee).replace(/\.js$/, "") + ".js"
-        : path.join("node_modules", importee, "index.js");
+    if (/^\./.test(importee)) return path.resolve(path.dirname(importer), importee).replace(/\.js$/, "") + ".js";
+    var d = path.join("node_modules", importee);
+    if (!fs.existsSync(d)) throw new Error("Missing module '" + importee + "'; required by '" + packageName(importer) + "'.");
+    return path.join(d, "index.js");
   }
 }).then(function(bundle) {
   if (argv["polyfill"] || argv["polyfill-map"]) process.stdout.write(polyfill.Map);
@@ -46,3 +48,9 @@ rollup.rollup({
 }).catch(function(error) {
   console.error(error);
 });
+
+function packageName(importer) {
+  var i = importer.indexOf("/node_modules/") + 14,
+      j = importer.indexOf("/", i);
+  return importer.slice(i, j);
+}
