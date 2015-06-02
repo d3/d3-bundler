@@ -50,7 +50,8 @@ rollup.rollup({
 });
 
 function packageName(importer) {
-  var i = importer.indexOf("/node_modules/") + 14,
-      j = importer.indexOf("/", i);
+  var i = importer.indexOf("/node_modules/");
+  if (i < 0) return path.basename(process.cwd());
+  var j = importer.indexOf("/", i += 14);
   return importer.slice(i, j);
 }
