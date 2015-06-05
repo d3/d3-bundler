@@ -18,11 +18,15 @@ var polyfill = {
       '\n',
   "Map":
       'if (typeof Map === "undefined") {\n' +
-      '  Map = function() {};\n' +
+      '  Map = function() { this.clear(); };\n' +
       '  Map.prototype = {\n' +
-      '    set: function(k, v) { this["$" + k] = v; return this; },\n' +
-      '    get: function(k) { return this["$" + k]; },\n' +
-      '    has: function(k) { return "$" + k in this; }\n' +
+      '    set: function(k, v) { this._[k] = v; return this; },\n' +
+      '    get: function(k) { return this._[k]; },\n' +
+      '    has: function(k) { return k in this._; },\n' +
+      '    delete: function(k) { return k in this._ && delete this._[k]; },\n' +
+      '    clear: function() { this._ = Object.create(null); },\n' +
+      '    get size() { var n = 0; for (var k in this._) ++n; return n; },\n' +
+      '    forEach: function(c) { for (var k in this._) c(this._[k], k, this); }\n' +
       '  };\n' +
       '}\n' +
       '\n'
