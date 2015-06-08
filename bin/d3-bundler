@@ -13,7 +13,7 @@ var polyfill = {
       '      || window.mozRequestAnimationFrame\n' +
       '      || window.webkitRequestAnimationFrame\n' +
       '      || window.oRequestAnimationFrame)\n' +
-      '      || function(callback) { setTimeout(callback, 17); };\n' +
+      '      || function(callback) { return setTimeout(callback, 17); };\n' +
       '}\n' +
       '\n',
   "Map":
