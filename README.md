@@ -2,12 +2,10 @@
 
 A [Rollup](https://github.com/rollup/rollup)-based bundler for D3 modules.
 
-## Introduction
-
 To install:
 
 ```
-npm install --save-dev d3-bundler
+npm install -g d3-bundler
 ```
 
 To use, define an ES6 module that imports the D3 code you need and defines the
@@ -27,16 +25,23 @@ export default {
 };
 ```
 
-Make sure you have these D3 modules installed:
+Make sure you have the desired D3 modules installed:
 
 ```
-npm install --save d3-selection
+npm install d3-selection
 ```
 
 Build your bundle:
 
 ```
-node_modules/.bin/d3-bundler -- bundle.js > d3.js
+d3-bundler -- bundle.js > d3.js
+```
+
+Or, minified:
+
+```
+npm install -g uglify-js
+d3-bundler -- bundle.js | uglifyjs -c -m -o d3.min.js
 ```
 
 Have a nice day!
@@ -66,6 +71,14 @@ Options:
 * <i>--polyfill-map</i> [default: false]
 
 Include a simple polyfill for platforms that do not implement ES6 Map natively.
+
+* <i>--polyfill-raf</i> [default: false]
+
+Include a simple polyfill for platforms that do not implement requestAnimationFrame natively.
+
+* <i>--polyfill</i> [default: false]
+
+Include all available polyfills.
 
 * <i>--format</i> [default: "umd"]
 
