@@ -6,30 +6,8 @@ var fs = require("fs"),
     rollup = require("rollup");
 
 var polyfill = {
-  "requestAnimationFrame":
-      'if (typeof requestAnimationFrame === "undefined") {\n' +
-      '  requestAnimationFrame = typeof window !== "undefined"\n' +
-      '      && (window.msRequestAnimationFrame\n' +
-      '      || window.mozRequestAnimationFrame\n' +
-      '      || window.webkitRequestAnimationFrame\n' +
-      '      || window.oRequestAnimationFrame)\n' +
-      '      || function(callback) { return setTimeout(callback, 17); };\n' +
-      '}\n' +
-      '\n',
-  "Map":
-      'if (typeof Map === "undefined") {\n' +
-      '  Map = function() { this.clear(); };\n' +
-      '  Map.prototype = {\n' +
-      '    set: function(k, v) { this._[k] = v; return this; },\n' +
-      '    get: function(k) { return this._[k]; },\n' +
-      '    has: function(k) { return k in this._; },\n' +
-      '    delete: function(k) { return k in this._ && delete this._[k]; },\n' +
-      '    clear: function() { this._ = Object.create(null); },\n' +
-      '    get size() { var n = 0; for (var k in this._) ++n; return n; },\n' +
-      '    forEach: function(c) { for (var k in this._) c(this._[k], k, this); }\n' +
-      '  };\n' +
-      '}\n' +
-      '\n'
+  "requestAnimationFrame": fs.readFileSync(path.join(__dirname, "..", "src", "polyfill", "requestAnimationFrame.js"), "utf8") + "\n",
+  "Map": fs.readFileSync(path.join(__dirname, "..", "src", "polyfill", "Map.js"), "utf8") + "\n"
 };
 
 var argv = minimist(process.argv.slice(2)),
