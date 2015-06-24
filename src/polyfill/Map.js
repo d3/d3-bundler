@@ -13,6 +13,6 @@ if (typeof Map === "undefined") {
   var m = new Map;
   if (m.set(0, 0) !== m) {
     m = m.set;
-    Map.prototype.set = function() { return m.apply(this, arguments), this; };
+    Map.prototype.set = function() { m.apply(this, arguments); return this; };
   }
 })();
