@@ -10,7 +10,7 @@
     "d3-bundler": "bin/d3-bundler"
   },
   "dependencies": {
-    "rollup": "~0.11.0",
+    "rollup": "~0.15.0",
     "minimist": "1"
   },
   "devDependencies": {
