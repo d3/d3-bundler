@@ -68,18 +68,6 @@ The input *file* should be an ES6 module that defines a default export object. S
 
 Options:
 
-* <i>--polyfill-map</i> [default: false]
-
-Include a simple polyfill for platforms that do not implement ES6 Map natively.
-
-* <i>--polyfill-raf</i> [default: false]
-
-Include a simple polyfill for platforms that do not implement requestAnimationFrame natively.
-
-* <i>--polyfill</i> [default: false]
-
-Include all available polyfills.
-
 * <i>--format</i> [default: "umd"]
 
 Specify the output format of the generated JavaScript. See [Rollup](https://github.com/rollup/rollup#api) for supported values.
