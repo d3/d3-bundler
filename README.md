@@ -68,18 +68,18 @@ The input *file* should be an ES6 module that defines a default export object. S
 
 Options:
 
-* <i>--external, -x</i> [default: false]
+* <i>--output, -o</i> [default: "-"]
 
-If true, keep external dependencies external. This is useful if you want to generate a CommonJS build, say, and use a different bundler for generating you bundle.
-
-* <i>--output, -o</i> [default: "bundle.js"]
-
-Specify the name of the generated bundle file.
-
-* <i>--format, -f</i> [default: "umd"]
-
-Specify the output format of the generated JavaScript. See [Rollup](https://github.com/rollup/rollup/wiki/JavaScript-API#format) for supported values.
+Specify the path to the generated bundle file. Use "-" for stdout.
 
 * <i>--name, -n</i> [default: "d3"]
 
 Specify the name of the output module. This determines the name of the exported global in certain output formats.
+
+* <i>--external, -x</i> [default: false]
+
+If true, keep external dependencies external. This enables the -f option, and is useful if you want to generate a CommonJS build or use a different bundler.
+
+* <i>--format, -f</i> [default: "umd"]
+
+Specify the output format of the generated JavaScript. See [Rollup](https://github.com/rollup/rollup/wiki/JavaScript-API#format) for supported values. This can only be used when inlining external dependencies (i.e., without -x).

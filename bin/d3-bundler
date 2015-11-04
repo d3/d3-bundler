@@ -14,7 +14,7 @@ var argv = minimist(process.argv.slice(2), {
     x: "external"
   },
   default: {
-    "output": "bundle.js",
+    "output": "-",
     "name": "d3",
     "format": "umd",
     "external": false
@@ -25,22 +25,26 @@ var argv = minimist(process.argv.slice(2), {
   }
 });
 
+if (!/^[$a-z_][0-9a-z_$]*$/i.test(argv.name)) {
+  console.warn("Error: illegal module name \"" + argv.name + "\"");
+  process.exit(1);
+}
+
+var entry = argv._[0] || "index.js";
+
 rollup.rollup({
-  entry: argv._[0] || "index.js",
+  entry: entry,
   external: [ // Squelch the external module warning.
     "d3-arrays",
-    "d3-bundler",
     "d3-color",
     "d3-dispatch",
     "d3-dsv",
     "d3-ease",
     "d3-format",
-    "d3-geo-projection",
     "d3-hierarchy",
     "d3-hull",
     "d3-interpolate",
     "d3-path",
-    "d3-polyfill",
     "d3-polygon",
     "d3-quadtree",
     "d3-random",
@@ -57,7 +61,35 @@ rollup.rollup({
   ],
   plugins: argv.external ? [] : [rollupNpm({jsnext: true})]
 }).then(function(bundle) {
-  bundle.write({dest: argv.output, format: argv.format, moduleName: argv.name});
-}).catch(function(error) {
-  console.error(error);
-});
+  var code = bundle.generate({
+    format: argv.external ? argv.format : "iife",
+    moduleName: argv.external ? argv.name : "exports"
+  }).code + "\n";
+  if (!argv.external) code = patch(code);
+  if (argv.output === "-") process.stdout.write(code);
+  else fs.writeFile(argv.output, code, "utf8", done);
+}).catch(done);
+
+function patch(code) {
+  var intro = code.slice(0, 37),
+      outro = code.slice(-26);
+  if (intro !== "(function (exports) { 'use strict';\n\n") throw new Error("unexpected output");
+  if (outro !== "\n})((this.exports = {}));\n") throw new Error("unexpected output");
+  return "!function(global, exports) {\n"
+      + "  \"use strict\";\n"
+      + "\n"
+      + code.slice(37, -26)
+      + "  exports.version = " + JSON.stringify(require(path.resolve(entry, "../package.json")).version) + ";\n"
+      + "\n"
+      + "  if (typeof define === \"function\" && define.amd) global." + argv.name + " = exports, define(\"" + argv.name + "\", [], function() { return exports; });\n"
+      + "  else if (typeof module === \"object\" && module.exports) module.exports = exports;\n"
+      + "  else global." + argv.name + " = exports;\n"
+      + "}(this, {});\n";
+}
+
+function done(error) {
+  if (error) {
+    console.error(error);
+    process.exit(1);
+  }
+}
