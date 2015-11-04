@@ -78,7 +78,7 @@ Specify the name of the generated bundle file.
 
 * <i>--format, -f</i> [default: "umd"]
 
-Specify the output format of the generated JavaScript. See [Rollup](https://github.com/rollup/rollup#api) for supported values.
+Specify the output format of the generated JavaScript. See [Rollup](https://github.com/rollup/rollup/wiki/JavaScript-API#format) for supported values.
 
 * <i>--name, -n</i> [default: "d3"]
 
