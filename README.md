@@ -9,20 +9,14 @@ npm install -g d3-bundler
 ```
 
 To use, define an ES6 module that imports the D3 code you need and defines the
-corresponding `d3` object. For example:
+corresponding exports. For example:
 
 ```js
-import {
+export {
   event,
   select,
   selectAll
 } from "d3-selection";
-
-export default {
-  get event() { return event; },
-  select: select,
-  selectAll: selectAll
-};
 ```
 
 Make sure you have the desired D3 modules installed:
@@ -64,13 +58,13 @@ d3.select("body").append("h1").text("Hello, world!");
 d3-bundler [options] -- [file]
 ```
 
-The input *file* should be an ES6 module that defines a default export object. See [the examples](https://github.com/d3/d3-bundler/tree/master/example).
+The input *file* should be an ES6 module that defines your exports. See [the examples](https://github.com/d3/d3-bundler/tree/master/example). If not specified, it defaults to “index.js”.
 
 Options:
 
 * <i>--output, -o</i> [default: "-"]
 
-Specify the path to the generated bundle file. Use "-" for stdout.
+Specify the path to the generated bundle file. Use “-” for stdout.
 
 * <i>--name, -n</i> [default: "d3"]
 
