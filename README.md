@@ -34,14 +34,14 @@ npm install d3-selection
 Build your bundle:
 
 ```
-d3-bundler -- bundle.js > d3.js
+d3-bundler -o d3.js -- index.js
 ```
 
 Or, minified:
 
 ```
 npm install -g uglify-js
-d3-bundler -- bundle.js | uglifyjs -c -m -o d3.min.js
+d3-bundler -o d3.js -- index.js && uglifyjs -c -m -o d3.min.js -- d3.js
 ```
 
 Have a nice day!
@@ -68,10 +68,18 @@ The input *file* should be an ES6 module that defines a default export object. S
 
 Options:
 
-* <i>--format</i> [default: "umd"]
+* <i>--external, -x</i> [default: false]
+
+If true, keep external dependencies external. This is useful if you want to generate a CommonJS build, say, and use a different bundler for generating you bundle.
+
+* <i>--output, -o</i> [default: "bundle.js"]
+
+Specify the name of the generated bundle file.
+
+* <i>--format, -f</i> [default: "umd"]
 
 Specify the output format of the generated JavaScript. See [Rollup](https://github.com/rollup/rollup#api) for supported values.
 
-* <i>--name</i> [default: "d3"]
+* <i>--name, -n</i> [default: "d3"]
 
 Specify the name of the output module. This determines the name of the exported global in certain output formats.

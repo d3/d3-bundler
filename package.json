@@ -1,7 +1,7 @@
 {
   "name": "d3-bundler",
-  "version": "0.3.0",
-  "description": "An Esperanto-based bundler for D3 modules.",
+  "version": "0.4.0",
+  "description": "A Rollup-based bundler for D3 modules.",
   "repository": {
     "type": "git",
     "url": "https://github.com/d3/d3-bundler.git"
@@ -10,7 +10,8 @@
     "d3-bundler": "bin/d3-bundler"
   },
   "dependencies": {
-    "rollup": "~0.15.0",
+    "rollup": "^0.20.0",
+    "rollup-plugin-npm": "^1.0.0",
     "minimist": "1"
   },
   "devDependencies": {

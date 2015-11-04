@@ -3,30 +3,61 @@
 var fs = require("fs"),
     path = require("path"),
     minimist = require("minimist"),
-    rollup = require("rollup");
+    rollup = require("rollup"),
+    rollupNpm = require("rollup-plugin-npm");
 
-var argv = minimist(process.argv.slice(2)),
-    entry = argv._[0],
-    name = argv.name || "d3",
-    format = argv.format || "umd";
+var argv = minimist(process.argv.slice(2), {
+  alias: {
+    o: "output",
+    f: "format",
+    n: "name",
+    x: "external"
+  },
+  default: {
+    "output": "bundle.js",
+    "name": "d3",
+    "format": "umd",
+    "external": false
+  },
+  unknown: function() {
+    console.warn("Usage: \033[1md3-bundler\033[0m [options] -- [file]");
+    process.exit(1);
+  }
+});
 
 rollup.rollup({
-  entry: entry,
-  resolvePath: function(importee, importer, options) {
-    if (/^\./.test(importee)) return path.resolve(path.dirname(importer), importee).replace(/\.js$/, "") + ".js";
-    var d = path.join("node_modules", importee);
-    if (!fs.existsSync(d)) throw new Error("Missing module '" + importee + "'; required by '" + packageName(importer) + "'.");
-    return path.join(d, "index.js");
-  }
+  entry: argv._[0] || "index.js",
+  external: [ // Squelch the external module warning.
+    "d3-arrays",
+    "d3-bundler",
+    "d3-color",
+    "d3-dispatch",
+    "d3-dsv",
+    "d3-ease",
+    "d3-format",
+    "d3-geo-projection",
+    "d3-hierarchy",
+    "d3-hull",
+    "d3-interpolate",
+    "d3-path",
+    "d3-polyfill",
+    "d3-polygon",
+    "d3-quadtree",
+    "d3-random",
+    "d3-scale",
+    "d3-selection",
+    "d3-selection-multi",
+    "d3-shape",
+    "d3-time",
+    "d3-time-format",
+    "d3-timer",
+    "d3-transition",
+    "d3-voronoi",
+    "d3-xhr"
+  ],
+  plugins: argv.external ? [] : [rollupNpm({jsnext: true})]
 }).then(function(bundle) {
-  process.stdout.write(bundle.generate({format: format, moduleName: name}).code);
+  bundle.write({dest: argv.output, format: argv.format, moduleName: argv.name});
 }).catch(function(error) {
   console.error(error);
 });
-
-function packageName(importer) {
-  var i = importer.indexOf("/node_modules/");
-  if (i < 0) return path.basename(process.cwd());
-  var j = importer.indexOf("/", i += 14);
-  return importer.slice(i, j);
-}
