@@ -71,12 +71,9 @@ rollup.rollup({
 }).catch(done);
 
 function patch(code) {
-  var intro = code.slice(0, 37),
-      outro = code.slice(-26),
-      version;
-  if (intro !== "(function (exports) { 'use strict';\n\n") throw new Error("unexpected output");
-  if (outro !== "\n})((this.exports = {}));\n") throw new Error("unexpected output");
-  try { version = require(path.resolve(entry, "../package.json")).version; } catch (ignore) {};
+  if (code.slice(0, 37) !== "(function (exports) { 'use strict';\n\n") throw new Error("unexpected output");
+  if (outro = code.slice(-26) !== "\n})((this.exports = {}));\n") throw new Error("unexpected output");
+  try { var version = require(path.resolve(entry, "../package.json")).version; } catch (ignore) {};
   return "!function(global, exports) {\n"
       + "  \"use strict\";\n"
       + "\n"
