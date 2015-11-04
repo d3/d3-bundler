@@ -9,7 +9,7 @@ npm install -g d3-bundler
 ```
 
 To use, define an ES6 module that imports the D3 code you need and defines the
-corresponding exports. For example:
+corresponding exports. For example, try this index.js:
 
 ```js
 export {
